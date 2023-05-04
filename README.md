@@ -17,3 +17,7 @@ for server
     1. PORT = (give port number ex. 3000)
     2. MONGO_URL = (give your mongodb url to connect ex. mongodb://localhost:27017/brandradiator)
   enter command npm start
+  
+  to enter in admin section hit an api http://localhost:3000/register 
+    enter credentials for email and password (throught postman)
+    and now can access admin section available in this project by entering email and password in login page of admin
