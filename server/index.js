@@ -1,37 +1,28 @@
 import express from "express";
-import cors from "cors";
 import mongoose from "mongoose";
-import Contact from "./src/contactModel.js";
+import dotenv from "dotenv";
+import cors from "cors";
+
+import routes from "./src/routes/route.js";
 
 const app = express();
+dotenv.config();
 
-app.use(express.json());
+const connect = () => {
+  mongoose
+    .connect(process.env.MONGO_URL)
+    .then(() => console.log("Mongo db Connected"))
+    .catch((err) => {
+      throw err;
+    });
+};
+
 app.use(cors());
+app.use(express.json());
 
-app.get("/", async (req, res) => {
-  const data = await Contact.find();
-  res.send({ status: true, data: data });
-});
+app.use("/", routes);
 
-app.post("/", async (req, res) => {
-  console.log(req.body);
-  await Contact.create(req.body);
-  res.send({ status: true, message: "Data uploaded Sucessfully" });
-});
-
-mongoose
-  .connect("mongodb://localhost:27017/crud", {
-    // useCreateIndex: true,
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => {
-    console.log("Mongo Connected");
-  })
-  .catch((e) => {
-    console.log(e);
-  });
-
-app.listen(3000, () => {
-  console.log("Server Started");
+app.listen(process.env.PORT, () => {
+  connect();
+  console.log("listening on port " + process.env.PORT);
 });
